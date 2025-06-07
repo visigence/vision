@@ -1,0 +1,283 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white font-inter overflow-x-hidden antialiased cursor-none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-orbitron tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl leading-tight;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl leading-tight;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl leading-snug;
+  }
+
+  p {
+    @apply leading-relaxed text-base md:text-lg tracking-normal;
+  }
+
+  a, button {
+    @apply transition-colors duration-200 cursor-none;
+  }
+}
+
+@layer components {
+  .shimmer-text {
+    @apply relative inline-block;
+    background: linear-gradient(
+      to right,
+      theme('colors.accent.400') 0%,
+      theme('colors.accent.300') 20%,
+      theme('colors.accent.400') 40%,
+      theme('colors.accent.500') 60%,
+      theme('colors.accent.400') 80%,
+      theme('colors.accent.300') 100%
+    );
+    background-size: 200% auto;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: shimmer 8s linear infinite;
+  }
+
+  .shimmer-text::after {
+    content: '';
+    @apply absolute inset-0;
+    background: inherit;
+    filter: blur(8px);
+    opacity: 0.3;
+    z-index: -1;
+  }
+
+  .cursor-main {
+    @apply fixed pointer-events-none z-[9999];
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    margin-top: -4px;
+    background: theme('colors.accent.400');
+    border-radius: 50%;
+    transition: width 0.2s ease, height 0.2s ease;
+    mix-blend-mode: screen;
+  }
+
+  .cursor-main.has-content {
+    @apply w-8 h-8 -ml-4 -mt-4;
+    background: rgba(168, 85, 247, 0.2);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+  }
+
+  .cursor-main .icon-container {
+    @apply flex items-center justify-center w-full h-full;
+    animation: pulseSubtle 2s ease-in-out infinite;
+  }
+
+  .cursor-trail {
+    @apply fixed pointer-events-none z-[9998];
+    width: 24px;
+    height: 24px;
+    margin-left: -12px;
+    margin-top: -12px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at center,
+      rgba(168, 85, 247, 0.15),
+      transparent 70%
+    );
+    mix-blend-mode: screen;
+  }
+
+  .neon-border {
+    @apply border border-transparent relative;
+    box-shadow: 0 0 5px theme('colors.accent.500'), 
+                0 0 10px theme('colors.accent.500'), 
+                0 0 15px theme('colors.accent.500');
+    animation: borderGlow 3s ease-in-out infinite alternate;
+  }
+  
+  .glass {
+    @apply bg-opacity-10 bg-white backdrop-blur-md border border-white/20 relative;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at var(--x, 50%) var(--y, 50%),
+      rgba(168, 85, 247, 0.15) 0%,
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .glass:hover::before {
+    opacity: 1;
+  }
+
+  .glass:hover {
+    box-shadow: 0 8px 32px 0 rgba(168, 85, 247, 0.37);
+    border-color: theme('colors.accent.400/30');
+  }
+  
+  .portfolio-card {
+    @apply glass rounded-xl overflow-hidden transition-all duration-500;
+  }
+  
+  .portfolio-card:hover {
+    @apply neon-border transform scale-[1.02] z-10;
+  }
+
+  .shimmer-overlay {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(
+      45deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 200%;
+    animation: shimmer 3s infinite linear;
+  }
+
+  .data-flow {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(168, 85, 247, 0.4) 0%,
+      transparent 50%
+    );
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .service-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      rgba(168, 85, 247, 0.1) 0%,
+      transparent 70%
+    );
+    transform: rotate(0deg);
+    transition: transform 0.5s ease-out;
+    pointer-events: none;
+  }
+
+  .service-card:hover::before {
+    transform: rotate(180deg);
+  }
+
+  .drop-shadow-glow {
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
+  }
+
+  .subtle-pattern-overlay {
+    background-image: radial-gradient(
+      rgba(168, 85, 247, 0.1) 1px,
+      transparent 1px
+    );
+    background-size: 32px 32px;
+    opacity: 0.5;
+    animation: patternFloat 20s linear infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes borderGlow {
+  0% {
+    box-shadow: 0 0 5px theme('colors.accent.500'), 
+                0 0 10px theme('colors.accent.500'), 
+                0 0 15px theme('colors.accent.500');
+  }
+  100% {
+    box-shadow: 0 0 10px theme('colors.accent.500'), 
+                0 0 20px theme('colors.accent.500'), 
+                0 0 30px theme('colors.accent.500');
+  }
+}
+
+@keyframes pulse {
+  0% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 0.3; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes patternFloat {
+  0% { background-position: 0 0; }
+  100% { background-position: 32px 32px; }
+}
+
+@keyframes pulseSubtle {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-card:hover {
+    transform: scale(1);
+  }
+  
+  .neon-border, .portfolio-card {
+    animation: none;
+    transition: none;
+  }
+
+  .shimmer-overlay,
+  .data-flow,
+  .subtle-pattern-overlay {
+    animation: none;
+  }
+
+  .cursor-main,
+  .cursor-trail {
+    display: none;
+  }
+
+  .cursor-main .icon-container {
+    animation: none;
+  }
+
+  .shimmer-text {
+    animation: none;
+    background-position: 0 0;
+  }
+}
